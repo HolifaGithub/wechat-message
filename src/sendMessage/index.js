@@ -11,7 +11,8 @@ const week = {
   6: '六',
   7: '天',
 }
-const getAllDataAndSend = (param) => {
+const getAllDataAndSend = async (param) => {
+  const { isDrinkWater = false, ...sendParam } = param;
   let today = new Date();
   let initDay = new Date(START_DAY);
   let lastDay = Math.floor((today - initDay) / 1000 / 60 / 60 / 24);
@@ -21,18 +22,39 @@ const getAllDataAndSend = (param) => {
     (today.getMonth() + 1) +
     " / " +
     today.getDate();
+
+
+  const nowTimeStr =     
+  `${today.getHours() < 10 ? `0${today.getHours()}` : today.getHours()} : ${today.getMinutes() < 10 ? `0${today.getMinutes()}` : today.getMinutes()} : ${today.getSeconds() < 10 ? `0${today.getSeconds()}` : today.getSeconds()}`;
   
   const weekDay = today.getDay();
   listConfig.loveDate.value = lastDay;
   listConfig.nowDate.value = `今天是${todaystr}，星期${week[weekDay]}`;
+
+  if(isDrinkWater){
+    sendParam.template_id = 'ENX2_obg4quJnqg0PEquXDQKPD8mfe7YzBJJUerKQ5k'
+
+    const data = await getContent();
+    return (
+      sendMessage(sendParam, { nowTime: {
+        value: nowTimeStr,
+        color: '#ff9c6e',
+      },
+       txt: {
+        value: data.data.text,
+        color: '#3C4244',
+       }
+      })
+    )
+  }
   return Promise.all([getContent(), getWeatherTips(), getWeatherData()]).then(
     (data) => {
       listConfig.txt.value = data[0].data.text;
-      const { WeatherImgUrl, WeatherText, Temperature, WindDirection } =
+      const { WeatherText, Temperature, WindDirection } =
         data[2];
       listConfig.weather.value = `${WeatherText}，${WindDirection}，${data[1]}`;
       listConfig.temperature.value = Temperature;
-      return sendMessage(param, listConfig);
+      return sendMessage(sendParam, listConfig);
     }
   );
 };

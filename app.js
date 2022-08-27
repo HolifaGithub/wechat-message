@@ -4,7 +4,7 @@ const getAllDataAndSend = require('./src/sendMessage/index')
 
 const schedule = require("node-schedule"); //定时器任务库
 
-async function start() {
+async function start(isDrinkWater = false) {
   let access_token
 
   try {
@@ -16,6 +16,7 @@ async function start() {
   getAllDataAndSend({
     ...params,
     access_token,
+    isDrinkWater
   })
     .then((res) => {
       if (res.data && res.data.errcode) {
@@ -32,11 +33,17 @@ let rule = new schedule.RecurrenceRule();
 rule.dayOfWeek = [0, new schedule.Range(1, 6)];
 rule.hour = SEND_HOUR;
 rule.minute = SEND_MINUTE;
+
 console.log("message: 开始等待目标时刻...");
 let j = schedule.scheduleJob(rule, function () {
-  console.log("执行任务");
+  console.log("执行任务【爱你】");
   start()
 });
 // start()
 
+const rule2 = new schedule.RecurrenceRule();
+schedule.scheduleJob('0 0 8,9,10,11,15,16,18,20,22 * * *', function () {
+  console.log("执行任务【喝水】");
+  start(true)
+});
 

@@ -2,8 +2,8 @@
 const params = {
   appid: 'wx8068887104b5f635',
   secret: 'a48cae84d358c3eb82974bd8c5f1a9aa',
-  touser: 'oRp_p5_GdZCWhUyCwbFSk-dU4zWY', // 我
-  // touser: 'oRp_p5_0oEqHPs7IsXUPdBEnGssc', // 熹熹
+  // touser: 'oRp_p5_GdZCWhUyCwbFSk-dU4zWY', // 我
+  touser: 'oRp_p5_0oEqHPs7IsXUPdBEnGssc', // 熹熹
   template_id: 'N4aL6kJ3tu3rysXprMhxIn7yJq-Re4k50J8caE59NB8',
 }
 
